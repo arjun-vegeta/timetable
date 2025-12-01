@@ -1,13 +1,11 @@
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import { useGoogleLogin } from '@react-oauth/google';
 import { useState } from 'react';
-import { FileSpreadsheet, FileText, Calendar, Cloud, Download } from 'lucide-react';
+import { FileSpreadsheet, FileText, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 function ExportButtons({ timetable, timetables, timeSlots, semester, section, viewMode = 'original', classes = [] }) {
-  const [googleConnected, setGoogleConnected] = useState(false);
   
   // Normalize timetable data - handle both single timetable array and timetables object
   const normalizedTimetable = timetable || (timetables ? Object.values(timetables).flat() : []);
@@ -597,59 +595,6 @@ function ExportButtons({ timetable, timetables, timeSlots, semester, section, vi
     URL.revokeObjectURL(url);
   };
 
-  const googleLogin = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      setGoogleConnected(true);
-      await syncToGoogleCalendar(tokenResponse.access_token);
-    },
-    scope: 'https://www.googleapis.com/auth/calendar',
-    flow: 'implicit'
-  });
-
-  const syncToGoogleCalendar = async (accessToken) => {
-    try {
-      const dayMap = { Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5 };
-      
-      for (const slot of normalizedTimetable) {
-        if (slot.course_code) {
-          const startDate = new Date();
-          const dayOffset = dayMap[slot.day];
-          const eventDate = new Date(startDate);
-          eventDate.setDate(startDate.getDate() + (dayOffset - startDate.getDay() + 7) % 7);
-          
-          const [startHour, startMin] = slot.time_start.split(':');
-          const [endHour, endMin] = slot.time_end.split(':');
-          
-          const start = new Date(eventDate);
-          start.setHours(parseInt(startHour), parseInt(startMin));
-          
-          const end = new Date(eventDate);
-          end.setHours(parseInt(endHour), parseInt(endMin));
-
-          const event = {
-            summary: `${slot.course_code} - ${slot.course_name}`,
-            location: slot.room_lab || '',
-            description: `Instructor: ${slot.instructor}`,
-            start: { dateTime: start.toISOString(), timeZone: 'Asia/Kolkata' },
-            end: { dateTime: end.toISOString(), timeZone: 'Asia/Kolkata' },
-            recurrence: ['RRULE:FREQ=WEEKLY;COUNT=15']
-          };
-
-          await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify(event)
-          });
-        }
-      }
-      
-      alert('Successfully synced to Google Calendar!');
-    } catch (error) {
-      console.error('Error syncing to Google Calendar:', error);
-      alert('Error syncing to Google Calendar. Please try again.');
-    }
-  };
-
   return (
     <div className="flex items-center gap-2 flex-wrap">
       <Button
@@ -678,15 +623,6 @@ function ExportButtons({ timetable, timetables, timeSlots, semester, section, vi
       >
         <Download className="w-3.5 h-3.5" />
         .ics
-      </Button>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => googleLogin()}
-        className="h-8 text-xs gap-1.5"
-      >
-        <Cloud className="w-3.5 h-3.5" />
-        {googleConnected ? 'Synced' : 'Google'}
       </Button>
     </div>
   );
