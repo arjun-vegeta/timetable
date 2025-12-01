@@ -19,7 +19,8 @@ app.use(cors({
   origin: [
     'http://localhost:5173',
     'https://timetable-cse.vercel.app',
-    /\.vercel\.app$/
+    /\.vercel\.app$/,
+    /\.onrender\.com$/
   ],
   credentials: true
 }));
