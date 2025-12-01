@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { FileSpreadsheet, Loader2, ArrowLeft, Sparkles, Settings, Coffee } from 'lucide-react';
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 // Exam slot configurations
 const MIDSEM_SLOTS = [

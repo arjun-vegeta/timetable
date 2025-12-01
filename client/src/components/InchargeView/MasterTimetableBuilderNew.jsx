@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Sparkles, Calendar, BookOpen, Loader2, ChevronLeft, ChevronRight, GripVertical, LogOut, Search, X, Settings, Users } from 'lucide-react';
 import ExportButtons from '../Common/ExportButtons';
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 function MasterTimetableBuilderNew() {
   const navigate = useNavigate();

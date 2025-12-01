@@ -4,7 +4,7 @@ import axios from 'axios';
 import TimetableGrid from '../Common/TimetableGrid';
 import ExportButtons from '../Common/ExportButtons';
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 function StudentView() {
   const navigate = useNavigate();

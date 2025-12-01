@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { ArrowLeft, BookOpen, GraduationCap, Calendar, Download, FileSpreadsheet } from 'lucide-react';
 import ExportButtons from '../Common/ExportButtons';
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 function StudentViewNew() {
   const navigate = useNavigate();

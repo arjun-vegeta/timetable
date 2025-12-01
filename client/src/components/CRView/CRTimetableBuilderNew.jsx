@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Calendar, BookOpen, LogOut, RotateCcw, Trash2, X, Loader2, Check, Cloud } from 'lucide-react';
 import ExportButtons from '../Common/ExportButtons';
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 function CRTimetableBuilderNew() {
   const navigate = useNavigate();

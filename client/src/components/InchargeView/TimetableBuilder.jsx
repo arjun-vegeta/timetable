@@ -4,7 +4,7 @@ import axios from 'axios';
 import { DndContext, DragOverlay, useDraggable, useDroppable } from '@dnd-kit/core';
 import TimetableGrid from '../Common/TimetableGrid';
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 function TimetableBuilder() {
   const navigate = useNavigate();
